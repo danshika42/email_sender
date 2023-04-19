@@ -1,11 +1,9 @@
 import pandas as pd
 import datetime
 import smtplib
-import schedule
-import time
 import json
-
-
+import os
+os.chdir(r"C:\Users\91859\Desktop\Automatic Birthday Wisher")
 
 def sendemail(to,sub,msg):
     s=smtplib.SMTP('smtp.gmail.com',587)
@@ -13,10 +11,13 @@ def sendemail(to,sub,msg):
     s.login(data["GMAIL_ID"],data["GMAIL_PSWD"])
     s.sendmail(data["GMAIL_ID"],to,f"Subject:{sub}\n\n{msg}")
     s.quit()
+    
 
+if __name__=="__main__":
+    
+    with open('data.json', 'r') as f:
+        data = json.load(f)
 
-
-def birthday_automator():
     df=pd.read_excel("data.xlsx")
     today=datetime.datetime.now().strftime("%d-%m")
     yearnow=datetime.datetime.now().strftime("%Y")
@@ -32,18 +33,5 @@ def birthday_automator():
 
     df.to_excel("data.xlsx")
 
-
-
-    
-
-if __name__=="__main__":
-    
-    with open('data.json', 'r') as f:
-        data = json.load(f)
-    schedule.every().day.at("17:14").do(birthday_automator)
-
-    while True:
-        schedule.run_pending()
-        time.sleep(30) 
   
    
